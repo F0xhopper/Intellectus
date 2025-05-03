@@ -82,14 +82,7 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="flex flex-col h-full max-h-screen bg-background text-foreground">
-      <header className="flex items-center justify-between px-6 py-4 border-b border-border">
-        <div className="flex items-center space-x-2">
-          <BookOpen className="h-5 w-5 text-primary" />
-          <h1 className="text-lg font-semibold">Intellectus</h1>
-        </div>
-      </header>
-
+    <div className="flex flex-col h-full bg-background text-foreground">
       <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full space-y-4 opacity-70">
@@ -115,7 +108,7 @@ const ChatInterface = () => {
                     : "bg-secondary text-secondary-foreground"
                 }`}
               >
-                <p className="whitespace-pre-wrap">{message.content}</p>
+                <p className="whitespace-pre-wrap text-sm">{message.content}</p>
               </div>
 
               {message.sources && message.sources.length > 0 && (
@@ -141,7 +134,7 @@ const ChatInterface = () => {
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Start asking questions..."
+          placeholder="Ask a question..."
           disabled={isLoading}
           className="flex-1"
         />
