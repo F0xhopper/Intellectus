@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import documentRoutes from "./routes/documentRoutes";
+import sourceRoutes from "./routes/sourceRoutes";
 import answerRoutes from "./routes/answerRoutes";
 
 // Load environment variables
@@ -17,7 +17,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Routes
-app.use("/api", documentRoutes);
+app.use("/api", sourceRoutes);
 app.use("/api", answerRoutes);
 
 // Health check route

@@ -8,8 +8,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 interface SearchResult {
   id: string;
   text: string;
-  file_path: string;
-  source_url?: string;
+  source_title: string;
   chunk_index: number;
 }
 
@@ -57,15 +56,16 @@ async function convertToEmbedding(text: string): Promise<number[]> {
 }
 
 /**
- * Process a document and store its embeddings in Supabase
+ * Process a source and store its embeddings in Supabase with association to the source
  */
-export async function embedDocument(
-  document: string,
-  fileName: string
+export async function embedSource(
+  source: string,
+  sourceId: number
 ): Promise<{ chunksProcessed: number }> {
   try {
     const client = supabaseClient();
-    const chunks = chunkText(document);
+
+    const chunks = chunkText(source);
     let chunksProcessed = 0;
 
     // Process each chunk and store in Supabase
@@ -73,14 +73,14 @@ export async function embedDocument(
       const embedding = await convertToEmbedding(chunks[i]);
 
       const record = {
-        file_path: fileName || "unnamed-document",
+        source_title: title || "unnamed-source",
         chunk_index: i,
         text: chunks[i],
         embedding,
       };
 
       // Insert into Supabase
-      const { error } = await client.from("knowledge_base").insert(record);
+      const { error } = await client.from("embeddings").insert(record);
 
       if (error) {
         console.error(`Error storing chunk ${i}:`, error);
@@ -92,7 +92,7 @@ export async function embedDocument(
 
     return { chunksProcessed };
   } catch (error) {
-    console.error("Error embedding document:", error);
+    console.error("Error embedding source:", error);
     throw error;
   }
 }
@@ -109,7 +109,7 @@ export async function searchEmbeddings(
     const queryEmbedding = await convertToEmbedding(query);
 
     // Search in Supabase using pgvector similarity search
-    const { data, error } = await client.rpc("match_documents", {
+    const { data, error } = await client.rpc("match_sources", {
       query_embedding: queryEmbedding,
       match_threshold: 0.5,
       match_count: limit,

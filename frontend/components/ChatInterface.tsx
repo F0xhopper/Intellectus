@@ -89,7 +89,7 @@ const ChatInterface = () => {
             <Sparkles className="h-16 w-16 text-primary" />
             <h2 className="text-xl font-medium">Ask Intellectus</h2>
             <p className="text-sm text-muted-foreground text-center max-w-md">
-              Explore the wisdom of the Angelic Doctor. Ask questions about his
+              Explore with depth the . Ask questions about his
               philosophy, theology, and teachings.
             </p>
           </div>
